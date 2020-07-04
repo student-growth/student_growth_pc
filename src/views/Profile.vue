@@ -1,15 +1,11 @@
-<!-- about -->
+<!-- 个人中心 -->
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    <span class="icon is-large">
-      <i class="fa fa-home"></i>
-    </span>
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
+  name:"Profile",
   data () {
     return {
     };
@@ -19,7 +15,7 @@ export default {
 
   computed: {},
 
-  //mounted: {},
+  mounted: {},
 
   methods: {}
 }

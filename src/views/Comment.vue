@@ -1,10 +1,7 @@
-<!-- about -->
+<!-- 辅导员评论 -->
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    <span class="icon is-large">
-      <i class="fa fa-home"></i>
-    </span>
+  <div>
+    辅导员评论
   </div>
 </template>
 
@@ -18,8 +15,6 @@ export default {
   components: {},
 
   computed: {},
-
-  //mounted: {},
 
   methods: {}
 }
