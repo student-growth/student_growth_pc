@@ -16,25 +16,25 @@ const PageRoute = [
     id:2,
     name: "成果审核",
     icon: 'el-icon-medal',
-    path: '/home/'
+    path: '/home/audit'
   },
   {
     id:3,
     name: "奖学金管理",
     icon: 'el-icon-coin',
-    path: '/home-3'
+    path: '/home/scholarship'
   },
   {
     id:4,
     name: "事项管理",
     icon: 'el-icon-edit-outline',
-    path: '/home-4'
+    path: '/home/project'
   },
   {
     id:5,
     name: "权限管理",
     icon: 'el-icon-lock',
-    path: '/home-5'
+    path: '/home/auth'
   },
 ]
 

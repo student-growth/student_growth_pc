@@ -1,7 +1,7 @@
 <!-- 学生成绩界面 -->
 <template>
   <div>
-    <h4>首页</h4>
+    <h4>学生成绩</h4>
     <el-card>
       <el-row :gutter="20">
         <el-col :span="8">
@@ -11,6 +11,9 @@
         </el-col>
         <el-col :span="4">
           <el-button type="primary" @click="showDialog=true">添加学生</el-button>
+        </el-col>
+        <el-col :span="4">
+          <el-button type="success" @click="outputExcel">导出为Excel表格</el-button>
         </el-col>
       </el-row>
       <el-table :data="stuList" border stripe>
@@ -44,46 +47,56 @@
 
     <!-- dialog -->
     <el-dialog title="添加学生信息" :visible.sync="showDialog" width="50%">
-      <el-form :model="addForm" :rules="addFormRules" ref="addForm" label-width="70px">
-        <el-form-item label="姓名：" prop="name">
-          <el-input v-model="addForm.name" placeholder="请输入学生姓名"></el-input>
+      <el-form
+        :model="addForm"
+        label-position="right"
+        :rules="addFormRules"
+        ref="addForm"
+        label-width="100px"
+      >
+        <el-form-item label="姓名:">
+          <el-row :gutter="20">
+            <el-col :span="16">
+              <el-input v-model="addForm.name" placeholder="请输入学生姓名"></el-input>
+            </el-col>
+          </el-row>
         </el-form-item>
-        <el-form-item  prop="sex">
+        <el-form-item prop="sex">
           <el-radio v-model="addForm.sex" label="male">男</el-radio>
           <el-radio v-model="addForm.sex" label="female">女</el-radio>
         </el-form-item>
-        <el-form-item label="学院" prop="department">
-          <el-select v-model="addForm.department" placeholder="请选择院校" @change="choseDep">
-            <el-option
-              v-for="item in depInfo"
-              :key="item.id"
-              :label="item.name"
-              :value="item.name"
-            ></el-option>
-          </el-select>  
-          
-          <el-select v-model="addForm.major" placeholder="请选择专业">
-            <el-option
-              v-for="item in majorInfo"
-              :key="item"
-              :label="item"
-              :value="item"
-            ></el-option>
-          </el-select>  
+        <el-form-item label="学院:" filterable>
+          <el-col :span="11">
+            <el-select v-model="addForm.department" placeholder="请选择院校" @change="choseDep">
+              <el-option
+                v-for="item in depInfo"
+                :key="item.id"
+                :label="item.name"
+                :value="item.name"
+              ></el-option>
+            </el-select>
+          </el-col>
+
+          <el-col :span="11">
+            <el-select v-model="addForm.major" placeholder="请选择专业">
+              <el-option v-for="item in majorInfo" :key="item" :label="item" :value="item"></el-option>
+            </el-select>
+          </el-col>
         </el-form-item>
-        <el-form-item label="专业" prop="major">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="年级" prop="grade">
-          <el-input></el-input>
-        </el-form-item>
-        <el-form-item label="班级" prop="class">
-          <el-input></el-input>
+        <el-form-item label="年级:">
+          <el-col :span="11">
+            <el-select v-model="addForm.grade" placeholder="请选择年级"></el-select>
+          </el-col> 
+          <el-col :span="11">
+            <el-select v-model="addForm.class" placeholder="请选择班级">
+
+            </el-select>
+          </el-col>
         </el-form-item>
       </el-form>
       <span slot="footer">
         <el-button @click="showDialog=false">取消</el-button>
-        <el-button type="primary">确定</el-button>
+        <el-button type="primary" @click="submitForm(addForm)">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -106,12 +119,12 @@ export default {
       },
       stuList: [],
       depInfo: [],
-      majorInfo:[],
+      majorInfo: [],
       total: 0,
       showDialog: false,
       addForm: {
         name: "",
-        sex: 0,
+        sex: "male",
         department: "",
         major: "",
         grade: ""
@@ -124,17 +137,22 @@ export default {
   },
 
   methods: {
+    outputExcel(){
+      console.log("导出为Excel")
+    },
     getDepInfo() {
       get("/getDepInfo")
-        .then(res => { 
+        .then(res => {
           this.depInfo = res.data.list
         })
         .catch(err => {
-          this.$message.error(err)
+          // this.$message.error(err)
+          console.log(err)
         })
     },
-    choseDep(info){
-      console.log(info)
+    choseDep(info) {
+      const dep = this.depInfo.filter(item => item.name === info)
+      this.majorInfo = dep[0].major
     },
     getStudentList() {
       get("/students", this.queryInfo)
@@ -143,7 +161,8 @@ export default {
           this.total = res.data.total
         })
         .catch(err => {
-          this.$message.error(err)
+          //this.$message.error(err)
+          console.log(err)
         })
     },
     editStu(info) {
@@ -154,8 +173,7 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
+      }).then(() => {
           del("/remove", info.id)
             .then(res => this.$message.success(res.data.msg))
             .catch(err => this.$message.error(err))
@@ -170,6 +188,10 @@ export default {
     handleCurrentChange(newPage) {
       this.queryInfo.currentPage = newPage
       this.getStudentList()
+    },
+    submitForm(form){
+      console.log(111)
+      console.log(form)
     }
   }
 }
@@ -183,5 +205,9 @@ export default {
   .el-pagination {
     margin-top: 15px;
   }
+}
+.el-form {
+  width: 90%;
+   
 }
 </style>
