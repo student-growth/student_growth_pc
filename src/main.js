@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 import {message} from 'element-ui'
 import '@/assets/css/global.css'
+import 'element-ui/lib/theme-chalk/base.css';
 
 
 Vue.prototype.$message = message

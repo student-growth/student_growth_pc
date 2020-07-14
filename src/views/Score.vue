@@ -46,7 +46,8 @@
     </el-card>
 
     <!-- dialog -->
-    <el-dialog title="添加学生信息" :visible.sync="showDialog" width="50%">
+    <transition name="el-fade-in-linear">
+      <el-dialog title="添加学生信息" :visible.sync="showDialog" width="50%">
       <el-form
         :model="addForm"
         label-position="right"
@@ -99,6 +100,7 @@
         <el-button type="primary" @click="submitForm(addForm)">确定</el-button>
       </span>
     </el-dialog>
+    </transition>
   </div>
 </template>
 
@@ -157,6 +159,7 @@ export default {
     getStudentList() {
       get("/students", this.queryInfo)
         .then(res => {
+          console.log(res)
           this.stuList = res.data.list
           this.total = res.data.total
         })

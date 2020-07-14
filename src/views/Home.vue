@@ -40,7 +40,6 @@ export default {
     //生命周期函数
   },
   data() {
-    
     return {
       menuList: path,
       collapse: false,
